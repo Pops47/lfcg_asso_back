@@ -8,22 +8,64 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    try {
+      return await this.prisma.user.create({ data: createUserDto });
+    } catch (error) {
+      console.log('🚀 ~ UsersService ~ create ~ error:', error);
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    try {
+      return await this.prisma.user.findMany({
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+    } catch (error) {
+      console.log('🚀 ~ UsersService ~ findAll ~ error:', error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    try {
+      return await this.prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+    } catch (error) {
+      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      return await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: updateUserDto,
+      });
+    } catch (error) {
+      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    try {
+      return await this.prisma.user.delete({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
+    }
   }
 }
