@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String          @id @default(uuid())
+  email            String          @unique @db.VarChar(255)
+  password         String          @db.VarChar(255)
+  role             UserRoleEnum    @default(VOLUTEER)
+  status           UserStatusEnum  @default(INACTIVE)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  profile          Profile?
+  participations   Participation[]
+  badges           Badge[]
+}
+
+model Profile{
+  userId           String          @id @unique 
+  firstname        String          @db.VarChar(50)
+  lastname         String          @db.VarChar(50)
+  username         String          @db.VarChar(30)
+  avatarPath       String?         @db.VarChar(255)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  user             User            @relation(fields: [userId], references:[id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Task{
+  id               Int             @id @default(autoincrement())
+  name             String          @unique @db.VarChar(50)
+  description      String          @db.Text()
+  skillName        String?         @db.VarChar(50)
+  skillImagePath   String?         @db.VarChar(255)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  missions         Mission[]
+  participations   Participation[]
+  badges           Badge[]
+}
+
+model Event{
+  id               Int             @id @default(autoincrement())
+  title            String          @db.VarChar(50)
+  description      String          @db.Text()
+  adress           String          @db.VarChar(255)
+  start            DateTime
+  end              DateTime
+  status           EventStatusEnum @default(OPEN)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  missions         Mission[]
+  participations   Participation[]
+}
+
+model Mission {
+  eventId          Int 
+  taskId           Int     
+  volunteersNeeded Int             @default(1) @db.SmallInt()
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  task             Task            @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
+  event            Event           @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+@@id([taskId, eventId])
+}
+
+model Participation {
+  userId           String 
+  eventId          Int
+  taskId           Int
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  task             Task            @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
+  event            Event           @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+@@id([userId, taskId, eventId])
+}
+
+
+model Badge {
+  userId           String 
+  taskId           Int 
+  level            Int             @default(1) 
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  task             Task            @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  @@id([userId, taskId])
+}
+
+enum UserRoleEnum {
+  VOLUTEER
+  ADMIN
+  SUPER_ADMIN
+}
+enum UserStatusEnum {
+  INACTIVE
+  ACTIVE
+}
+
+enum EventStatusEnum {
+  FULL
+  OPEN
+}
+
+
+
+
+
+
