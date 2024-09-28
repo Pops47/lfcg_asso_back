@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProfilesService } from './profiles.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ProfilesService } from './profiles.service';
 
 @Controller('profiles')
 export class ProfilesController {
@@ -17,18 +25,21 @@ export class ProfilesController {
     return this.profilesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profilesService.findOne(+id);
+  @Get(':userId')
+  findOne(@Param('userId') userId: string) {
+    return this.profilesService.findOne(userId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profilesService.update(+id, updateProfileDto);
+  @Patch(':userId')
+  update(
+    @Param('userId') userId: string,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.profilesService.update(userId, updateProfileDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profilesService.remove(+id);
+  @Delete(':userId')
+  remove(@Param('userId') userId: string) {
+    return this.profilesService.remove(userId);
   }
 }
