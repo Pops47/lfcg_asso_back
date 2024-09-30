@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserWithoutPassword } from 'src/utils/types/UserTypes';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -7,65 +8,57 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
-    try {
-      return await this.prisma.user.create({ data: createUserDto });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ create ~ error:', error);
-    }
+  async create(createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
+    return this.prisma.user.create({
+      data: createUserDto,
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  async findAll() {
-    try {
-      return await this.prisma.user.findMany({
-        select: {
-          id: true,
-          email: true,
-        },
-      });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ findAll ~ error:', error);
-    }
+  async findAll(): Promise<UserWithoutPassword[]> {
+    return this.prisma.user.findMany({
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  async findOne(id: string) {
-    try {
-      return await this.prisma.user.findUnique({
-        where: {
-          id: id,
-        },
-        select: {
-          id: true,
-          email: true,
-        },
-      });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
-    }
+  async findOne(id: string): Promise<UserWithoutPassword> {
+    return this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    try {
-      return await this.prisma.user.update({
-        where: {
-          id: id,
-        },
-        data: updateUserDto,
-      });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
-    }
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserWithoutPassword> {
+    return this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: updateUserDto,
+      omit: {
+        password: true,
+      },
+    });
   }
 
-  async remove(id: string) {
-    try {
-      return await this.prisma.user.delete({
-        where: {
-          id: id,
-        },
-      });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ findOne ~ error:', error);
-    }
+  async remove(id: string): Promise<UserWithoutPassword> {
+    return this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+      omit: {
+        password: true,
+      },
+    });
   }
 }

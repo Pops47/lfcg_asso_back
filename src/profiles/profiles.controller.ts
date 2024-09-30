@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { Profile } from '@prisma/client';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
@@ -16,30 +17,30 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  create(@Body() createProfileDto: CreateProfileDto) {
+  async create(@Body() createProfileDto: CreateProfileDto): Promise<Profile> {
     return this.profilesService.create(createProfileDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Profile[]> {
     return this.profilesService.findAll();
   }
 
   @Get(':userId')
-  findOne(@Param('userId') userId: string) {
+  async findOne(@Param('userId') userId: string): Promise<Profile> {
     return this.profilesService.findOne(userId);
   }
 
   @Patch(':userId')
-  update(
+  async update(
     @Param('userId') userId: string,
     @Body() updateProfileDto: UpdateProfileDto,
-  ) {
+  ): Promise<Profile> {
     return this.profilesService.update(userId, updateProfileDto);
   }
 
   @Delete(':userId')
-  remove(@Param('userId') userId: string) {
+  async remove(@Param('userId') userId: string): Promise<Profile> {
     return this.profilesService.remove(userId);
   }
 }
