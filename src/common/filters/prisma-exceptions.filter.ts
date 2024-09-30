@@ -17,6 +17,7 @@ import { Response } from 'express';
 )
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
+    console.log('🚀 ~ CustomExceptionFilter ~ exception:', exception);
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
@@ -24,9 +25,11 @@ export class CustomExceptionFilter implements ExceptionFilter {
     // For errors that are neither PrismaExceptions nor HttpExceptions
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
+    let type = 'Unknown';
 
     //Handle Prisma Exceptions
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      type = 'Prisma Exception';
       switch (exception.code) {
         case 'P2002': // Unique constraint failed - already exists
           status = HttpStatus.CONFLICT;
@@ -60,11 +63,13 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
       //Handle HttpExceptions
     } else if (exception instanceof HttpException) {
+      type = 'Http Exception';
       status = exception.getStatus();
       message = exception.getResponse() as string;
     }
     response.status(status).json({
       statusCode: status,
+      type,
       timestamp: new Date().toISOString(),
       message,
       path: request.url,
