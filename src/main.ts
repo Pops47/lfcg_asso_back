@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { CustomExceptionFilter } from './common/filters/prisma-exceptions.filter';
+import { CustomExceptionFilter } from './common/filters/custom-exceptions.filter';
 import { validationPipeOptions } from './common/pipes/validation-pipe-options';
 
 async function bootstrap() {

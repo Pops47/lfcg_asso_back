@@ -9,8 +9,10 @@ export const validationPipeOptions = {
     return new HttpException(
       {
         statusCode: HttpStatus.BAD_REQUEST,
+        type: 'Bad Request',
         message: 'Validation error',
-        errors: formattedErrors,
+        details: formattedErrors,
+        timestamp: new Date().toISOString(),
       },
       HttpStatus.BAD_REQUEST,
     );
