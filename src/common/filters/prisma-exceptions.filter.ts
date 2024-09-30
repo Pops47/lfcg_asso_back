@@ -2,6 +2,7 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
+  HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
@@ -14,14 +15,17 @@ import { Response } from 'express';
   Prisma.PrismaClientInitializationError,
   Prisma.PrismaClientValidationError,
 )
-export class PrismaExceptionFilter implements ExceptionFilter {
+export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
+
+    // For errors that are neither PrismaExceptions nor HttpExceptions
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
 
+    //Handle Prisma Exceptions
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       switch (exception.code) {
         case 'P2002': // Unique constraint failed - already exists
@@ -53,6 +57,11 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Prisma.PrismaClientValidationError) {
       status = HttpStatus.BAD_REQUEST;
       message = 'Validation error occurred during a Prisma operation';
+
+      //Handle HttpExceptions
+    } else if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      message = exception.getResponse() as string;
     }
     response.status(status).json({
       statusCode: status,
