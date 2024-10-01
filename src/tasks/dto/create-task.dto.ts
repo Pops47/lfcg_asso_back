@@ -1,6 +1,5 @@
 import {
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -8,10 +7,6 @@ import {
 } from 'class-validator';
 
 export class CreateTaskDto {
-  @IsNumber()
-  @IsNotEmpty()
-  id: number;
-
   @IsString()
   @IsNotEmpty()
   @Length(1, 50)

@@ -28,11 +28,9 @@ export class TasksController {
 
   @Get('id/:id')
   async findOne(@Param('id') id: string): Promise<Task> {
+    console.log('🚀 ~ TasksController ~ findOne ~ id:', id);
+
     return this.tasksService.findOneById(+id);
-  }
-  @Get('name/:name')
-  async findOneByName(@Param('name') name: string): Promise<Task> {
-    return this.tasksService.findOneByName(name);
   }
 
   @Patch(':id')
