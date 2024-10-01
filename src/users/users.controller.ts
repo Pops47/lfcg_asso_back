@@ -7,15 +7,22 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserWithoutPassword } from 'src/utils/types/UserTypes';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
+@ApiTags('User')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: 'Create a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User Created',
+  })
   @Post()
   async create(
     @Body() createUserDto: CreateUserDto,
