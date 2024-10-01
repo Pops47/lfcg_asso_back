@@ -14,10 +14,10 @@ import { Response } from 'express';
   Prisma.PrismaClientRustPanicError,
   Prisma.PrismaClientInitializationError,
   Prisma.PrismaClientValidationError,
+  HttpException,
 )
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
-    console.log('🚀 ~ CustomExceptionFilter ~ exception:', exception);
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
