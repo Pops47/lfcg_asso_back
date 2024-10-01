@@ -28,9 +28,16 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<UserWithoutPassword> {
-    return this.usersService.findOne(id);
+  @Get('id/:id')
+  async findOneById(@Param('id') id: string): Promise<UserWithoutPassword> {
+    return this.usersService.findOneById(id);
+  }
+
+  @Get('email/:email')
+  async findOneByEmail(
+    @Param('email') email: string,
+  ): Promise<UserWithoutPassword> {
+    return this.usersService.findOneByEmail(email);
   }
 
   @Patch(':id')

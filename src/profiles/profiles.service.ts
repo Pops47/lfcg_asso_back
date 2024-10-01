@@ -9,17 +9,17 @@ export class ProfilesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProfileDto: CreateProfileDto): Promise<Profile> {
-    return await this.prisma.profile.create({
+    return this.prisma.profile.create({
       data: createProfileDto,
     });
   }
 
   async findAll(): Promise<Profile[]> {
-    return await this.prisma.profile.findMany();
+    return this.prisma.profile.findMany();
   }
 
   async findOne(userId: string): Promise<Profile> {
-    return await this.prisma.profile.findUnique({
+    return this.prisma.profile.findUnique({
       where: { userId },
     });
   }
@@ -28,14 +28,14 @@ export class ProfilesService {
     userId: string,
     updateProfileDto: UpdateProfileDto,
   ): Promise<Profile> {
-    return await this.prisma.profile.update({
+    return this.prisma.profile.update({
       where: { userId },
       data: updateProfileDto,
     });
   }
 
   async remove(userId: string): Promise<Profile> {
-    return await this.prisma.profile.delete({
+    return this.prisma.profile.delete({
       where: { userId },
     });
   }

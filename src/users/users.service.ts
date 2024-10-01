@@ -25,11 +25,18 @@ export class UsersService {
     });
   }
 
-  async findOne(id: string): Promise<UserWithoutPassword> {
+  async findOneById(id: string): Promise<UserWithoutPassword> {
     return this.prisma.user.findUnique({
-      where: {
-        id: id,
+      where: { id },
+      omit: {
+        password: true,
       },
+    });
+  }
+
+  async findOneByEmail(email: string): Promise<UserWithoutPassword> {
+    return this.prisma.user.findUnique({
+      where: { email },
       omit: {
         password: true,
       },
@@ -41,9 +48,7 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
   ): Promise<UserWithoutPassword> {
     return this.prisma.user.update({
-      where: {
-        id: id,
-      },
+      where: { id },
       data: updateUserDto,
       omit: {
         password: true,
@@ -53,9 +58,7 @@ export class UsersService {
 
   async remove(id: string): Promise<UserWithoutPassword> {
     return this.prisma.user.delete({
-      where: {
-        id: id,
-      },
+      where: { id },
       omit: {
         password: true,
       },
