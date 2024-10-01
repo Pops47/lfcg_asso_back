@@ -29,7 +29,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     //Handle Prisma Exceptions
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
-      type = 'Prisma Exception';
+      type = 'Database Exception';
       switch (exception.code) {
         case 'P2002': // Unique constraint failed - already exists
           status = HttpStatus.CONFLICT;
@@ -49,17 +49,16 @@ export class CustomExceptionFilter implements ExceptionFilter {
       }
     } else if (exception instanceof Prisma.PrismaClientUnknownRequestError) {
       status = HttpStatus.BAD_REQUEST;
-      message =
-        'Unknown database request error occurred during a Prisma operation';
+      message = 'Unknown database request error occurred';
     } else if (exception instanceof Prisma.PrismaClientRustPanicError) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = 'Unexpected database panic occurred during a Prisma operation';
+      message = 'Unexpected database panic occurred';
     } else if (exception instanceof Prisma.PrismaClientInitializationError) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = 'Database initialization failed during a Prisma operation';
+      message = 'Database initialization failed';
     } else if (exception instanceof Prisma.PrismaClientValidationError) {
       status = HttpStatus.BAD_REQUEST;
-      message = 'Validation error occurred during a Prisma operation';
+      message = 'Validation error occurred';
 
       //Handle HttpExceptions
     } else if (exception instanceof HttpException) {
