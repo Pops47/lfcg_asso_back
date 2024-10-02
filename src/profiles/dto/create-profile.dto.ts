@@ -5,6 +5,7 @@ import {
   IsUrl,
   IsUUID,
   Length,
+  MaxLength,
 } from 'class-validator';
 
 export class CreateProfileDto {
@@ -32,5 +33,6 @@ export class CreateProfileDto {
   @IsString()
   @IsNotEmpty()
   @IsUrl()
+  @MaxLength(255)
   avatarPath?: string;
 }

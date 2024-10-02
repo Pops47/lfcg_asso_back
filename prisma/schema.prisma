@@ -53,16 +53,28 @@ model Task{
 model Event{
   id               Int             @id @default(autoincrement())
   title            String          @db.VarChar(50)
-  description      String          @db.Text()
-  adress           String          @db.VarChar(255)
-  start            DateTime
-  end              DateTime
+  description      String?         @db.Text()
+  startDate        DateTime        
+  endDate          DateTime        
+  locationId       Int             
+  location         Location        @relation(fields: [locationId], references: [id])
   status           EventStatusEnum @default(OPEN)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
-  missions         Mission[]
+  missions         Mission[]       
 }
 
+model Location {
+  id               Int             @id @default(autoincrement())
+  address          String          @db.VarChar(255)
+  postalCode       String          @db.VarChar(5) 
+  city             String          @db.VarChar(100)
+  latitude         Float
+  longitude        Float
+  createdAt        DateTime        @default(now())
+  updateddAt        DateTime       @default(now())
+  events           Event[]
+}
 model Mission {
   id               Int             @id @default(autoincrement())
   eventId          Int 
@@ -84,7 +96,6 @@ model Participation {
   mission          Mission         @relation(fields: [missionId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
 @@id([userId, missionId])
 }
-
 
 model Badge {
   userId           String 
