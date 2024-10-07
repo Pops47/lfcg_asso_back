@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   controllers: [AppController],
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     ProfilesModule,
     TasksModule,
     UsersModule,
+    LocationModule,
   ],
 })
 export class AppModule {}
