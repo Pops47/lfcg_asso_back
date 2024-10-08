@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
+import { Mission } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 
 @Injectable()
 export class MissionsService {
-  create(createMissionDto: CreateMissionDto) {
-    return 'This action adds a new mission';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createMissionDto: CreateMissionDto): Promise<Mission> {
+    return this.prisma.mission.create({
+      data: createMissionDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all missions`;
+  async findAll(): Promise<Mission[]> {
+    return this.prisma.mission.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mission`;
+  async findOneById(id: number): Promise<Mission> {
+    console.log('🚀 ~ MissionsService ~ findOneById ~ id:', id);
+    return this.prisma.mission.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateMissionDto: UpdateMissionDto) {
-    return `This action updates a #${id} mission`;
+  async update(
+    id: number,
+    updateMissionDto: UpdateMissionDto,
+  ): Promise<Mission> {
+    return this.prisma.mission.update({
+      where: { id },
+      data: updateMissionDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mission`;
+  async remove(id: number): Promise<Mission> {
+    return this.prisma.mission.delete({
+      where: { id },
+    });
   }
 }

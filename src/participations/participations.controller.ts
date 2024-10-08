@@ -1,15 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { CreateDeleteParticipationDto } from './dto/create-delete-participation.dto';
 import { ParticipationsService } from './participations.service';
-import { CreateParticipationDto } from './dto/create-participation.dto';
-import { UpdateParticipationDto } from './dto/update-participation.dto';
 
 @Controller('participations')
 export class ParticipationsController {
   constructor(private readonly participationsService: ParticipationsService) {}
 
   @Post()
-  create(@Body() createParticipationDto: CreateParticipationDto) {
-    return this.participationsService.create(createParticipationDto);
+  create(@Body() createDeleteParticipationDto: CreateDeleteParticipationDto) {
+    return this.participationsService.create(createDeleteParticipationDto);
   }
 
   @Get()
@@ -17,18 +16,18 @@ export class ParticipationsController {
     return this.participationsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.participationsService.findOne(+id);
+  @Get('user/:userId')
+  findByUser(@Param('userId') userId: string) {
+    return this.participationsService.findByUser(userId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateParticipationDto: UpdateParticipationDto) {
-    return this.participationsService.update(+id, updateParticipationDto);
+  @Get('mission/:missionId')
+  findByMission(@Param('missionId') missionId: string) {
+    return this.participationsService.findByMission(+missionId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.participationsService.remove(+id);
+  @Delete()
+  remove(@Body() createDeleteParticipationDto: CreateDeleteParticipationDto) {
+    return this.participationsService.remove(createDeleteParticipationDto);
   }
 }

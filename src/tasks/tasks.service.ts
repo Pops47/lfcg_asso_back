@@ -19,7 +19,6 @@ export class TasksService {
   }
 
   async findOneById(id: number): Promise<Task> {
-    console.log('🚀 ~ TasksService ~ findOneById ~ id:', id);
     return this.prisma.task.findUnique({
       where: { id },
     });
