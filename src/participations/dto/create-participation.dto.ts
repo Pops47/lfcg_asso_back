@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
 
-export class CreateDeleteParticipationDto {
+export class CreateParticipationDto {
   @IsNotEmpty()
   @IsString()
   @IsUUID()

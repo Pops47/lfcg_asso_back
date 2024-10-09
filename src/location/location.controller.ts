@@ -1,34 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { LocationService } from './location.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { Location } from '@prisma/client';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { LocationService } from './location.service';
 
 @Controller('location')
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 
   @Post()
-  create(@Body() createLocationDto: CreateLocationDto) {
+  async create(
+    @Body() createLocationDto: CreateLocationDto,
+  ): Promise<Location> {
     return this.locationService.create(createLocationDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Location[]> {
     return this.locationService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.locationService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Location> {
+    return this.locationService.findOneById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocationDto: UpdateLocationDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateLocationDto: UpdateLocationDto,
+  ): Promise<Location> {
     return this.locationService.update(+id, updateLocationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<Location> {
     return this.locationService.remove(+id);
   }
 }

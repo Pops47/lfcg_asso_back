@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { Event } from '@prisma/client';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventsService } from './events.service';
@@ -16,27 +17,30 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
+  async create(@Body() createEventDto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(createEventDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Event[]> {
     return this.eventsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOneById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateEventDto: UpdateEventDto,
+  ): Promise<Event> {
     return this.eventsService.update(+id, updateEventDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<Event> {
     return this.eventsService.remove(+id);
   }
 }

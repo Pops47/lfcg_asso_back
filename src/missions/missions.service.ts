@@ -19,7 +19,6 @@ export class MissionsService {
   }
 
   async findOneById(id: number): Promise<Mission> {
-    console.log('🚀 ~ MissionsService ~ findOneById ~ id:', id);
     return this.prisma.mission.findUnique({
       where: { id },
     });
