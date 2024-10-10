@@ -33,7 +33,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
       switch (exception.code) {
         case 'P2002': // Unique constraint failed - already exists
           status = HttpStatus.CONFLICT;
-          message = `A ${exception.meta.modelName.toString().toLowerCase()} with this ${exception.meta.target[0]} already exists`;
+          message = `A ${exception.meta.modelName.toString().toLowerCase()} with this ${exception.meta.field_name} already exists`;
           break;
         case 'P2025': // Record not found
           status = HttpStatus.NOT_FOUND;
@@ -41,7 +41,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
           break;
         case 'P2003': // Foreign key constraint violation
           status = HttpStatus.BAD_REQUEST;
-          message = `Bad payload for ${exception.meta.modelName.toString().toLowerCase()}.${exception.meta.target[0]}`;
+          message = `Bad payload for ${exception.meta.modelName.toString().toLowerCase()}. Foreign key ${exception.meta.field_name.toString().split('_')[1]} not found`;
           break;
         default:
           status = HttpStatus.BAD_REQUEST;
