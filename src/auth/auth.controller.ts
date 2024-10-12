@@ -14,9 +14,4 @@ export class AuthController {
   async signup(@Body() signUpDto: SignUpOrLoginDto): Promise<void> {
     return;
   }
-
-  @Post('login')
-  async login(@Body() loginDto: SignUpOrLoginDto): Promise<void> {
-    return;
-  }
 }
