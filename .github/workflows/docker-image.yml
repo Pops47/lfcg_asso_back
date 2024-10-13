@@ -11,20 +11,15 @@ permissions:
   contents: read
 
 jobs:
-
+  
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v3
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ghcr.io/pops47/${{ github.event.repository.name }}:latest
-
+        run: docker build . --file Dockerfile --tag ghcr.io/pops47/${{ github.event.repository.name }}:prod
       - name: Push the Docker image to GitHub Container Registry
-        run: docker push ghcr.io/pops47/${{ github.event.repository.name }}:latest
+        run: docker push ghcr.io/pops47/${{ github.event.repository.name }}:prod
