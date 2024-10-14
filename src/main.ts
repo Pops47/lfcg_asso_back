@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['https://devpops.fr'], // Replace with your frontend URL
+    origin: ['https://managevent.devpops.fr'], // Replace with your frontend URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow credentials (like cookies, authorization headers, etc.)
     allowedHeaders:
