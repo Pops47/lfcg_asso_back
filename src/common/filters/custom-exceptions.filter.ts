@@ -33,7 +33,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
       switch (exception.code) {
         case 'P2002': // Unique constraint failed - already exists
           status = HttpStatus.CONFLICT;
-          message = `A ${exception.meta.modelName.toString().toLowerCase()} with this ${exception.meta.field_name} already exists`;
+          message = `A ${exception.meta.modelName.toString().toLowerCase()} with this unique key already exists`;
           break;
         case 'P2025': // Record not found
           status = HttpStatus.NOT_FOUND;
