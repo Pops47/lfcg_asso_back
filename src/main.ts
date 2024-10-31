@@ -25,7 +25,9 @@ async function bootstrap() {
 
   //start server
   await app.listen(process.env.PORT || 3000, () =>
-    console.log('🚀🚀🚀 Server succesfully started ! 🚀🚀🚀'),
+    console.log(
+      `🚀🚀🚀 Server succesfully started on port ${process.env.PORT}! 🚀🚀🚀`,
+    ),
   );
 }
 bootstrap();
